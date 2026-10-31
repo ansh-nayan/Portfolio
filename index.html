@@ -404,15 +404,11 @@
         <section class="section" id="contact" aria-labelledby="contact-title">
             <div class="section-inner">
                 <h2 class="section-title" id="contact-title">Let’s <span class="accent" style="color:var(--blue)">connect</span></h2>
-                <p class="section-lead">Have a question or an idea? Leave a note below.</p>
-                <form class="contact-panel" onsubmit="sendMessage(event)">
-                    <div class="field"><label for="name">Your name</label><input type="text" id="name" name="name" autocomplete="name" placeholder="e.g. Alex" required></div>
-                    <div class="field"><label for="email">Your email</label><input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required></div>
-                    <div class="field"><label for="message">Your message</label><textarea id="message" name="message" placeholder="What’s on your mind?" required></textarea></div>
-                    <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-                    <button class="button" type="submit">Send message</button>
-                    <p class="form-note" id="form-note" aria-live="polite">Your message goes straight to my inbox.</p>
-                </form>
+                <p class="section-lead">Have a question or an idea? Send me an email.</p>
+                <div class="contact-panel" style="text-align:center">
+                    <p style="margin-bottom:1.2rem">Got an idea, a project, or just want to say hi? Share it with me over email.</p>
+                    <a class="button" href="mailto:anshnayan80@gmail.com" style="display:inline-block;text-decoration:none">✉ anshnayan80@gmail.com</a>
+                </div>
             </div>
         </section>
     </main>
@@ -534,36 +530,6 @@
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { build(); request(); });
 
         document.getElementById("year").textContent = new Date().getFullYear();
-        async function sendMessage(event) {
-            event.preventDefault();
-            const form = event.target, note = document.getElementById("form-note");
-            const btn = form.querySelector("button[type=submit]");
-            if (form.elements["_honey"].value) return;          // hidden spam trap: real people leave it empty
-            const name = document.getElementById("name").value.trim();
-            btn.disabled = true; note.textContent = "Sending…";
-            try {
-                const r = await fetch("https://formsubmit.co/ajax/anshnayan80@gmail.com", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                    body: JSON.stringify({
-                        name, email: document.getElementById("email").value.trim(),
-                        message: document.getElementById("message").value.trim(),
-                        _subject: "New message from your portfolio website", _template: "table"
-                    })
-                });
-                const d = await r.json();
-                if (!r.ok || d.success === false || d.success === "false") throw new Error(d.message || r.status);
-                form.reset();
-                note.textContent = "Thanks, " + name + "! Your message has been sent.";
-            } catch (err) {
-                const local = location.protocol === "file:";
-                note.textContent = "Sorry, that didn’t send" + (local ? " (this page is open as a local file, and the form only works once the site is hosted online)." : " (" + (err.message || "unknown error") + ").") + " You can also email me at ";
-                const a = document.createElement("a");
-                a.href = "mailto:anshnayan80@gmail.com"; a.textContent = "anshnayan80@gmail.com";
-                note.appendChild(a);
-            } finally { btn.disabled = false; }
-        }
-
         // ---- Chess.com live ratings ----
         const CHESS_USERNAME = "AnshX707";   // your Chess.com username
         const CHESS_REFRESH_MS = 60000;   // how often (ms) an open page re-checks for new ratings
