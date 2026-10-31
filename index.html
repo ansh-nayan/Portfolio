@@ -556,7 +556,11 @@
                 form.reset();
                 note.textContent = "Thanks, " + name + "! Your message has been sent.";
             } catch (err) {
-                note.textContent = "Sorry, that didn’t send. Please try again in a moment.";
+                const local = location.protocol === "file:";
+                note.textContent = "Sorry, that didn’t send" + (local ? " (this page is open as a local file, and the form only works once the site is hosted online)." : " (" + (err.message || "unknown error") + ").") + " You can also email me at ";
+                const a = document.createElement("a");
+                a.href = "mailto:anshnayan80@gmail.com"; a.textContent = "anshnayan80@gmail.com";
+                note.appendChild(a);
             } finally { btn.disabled = false; }
         }
 
