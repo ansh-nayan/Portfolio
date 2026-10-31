@@ -409,8 +409,9 @@
                     <div class="field"><label for="name">Your name</label><input type="text" id="name" name="name" autocomplete="name" placeholder="e.g. Alex" required></div>
                     <div class="field"><label for="email">Your email</label><input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required></div>
                     <div class="field"><label for="message">Your message</label><textarea id="message" name="message" placeholder="What’s on your mind?" required></textarea></div>
+                    <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
                     <button class="button" type="submit">Send message</button>
-                    <p class="form-note" id="form-note" aria-live="polite">This demo form isn’t connected to an inbox yet.</p>
+                    <p class="form-note" id="form-note" aria-live="polite">Your message goes straight to my inbox.</p>
                 </form>
             </div>
         </section>
@@ -533,9 +534,30 @@
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { build(); request(); });
 
         document.getElementById("year").textContent = new Date().getFullYear();
-        function sendMessage(event) {
+        async function sendMessage(event) {
             event.preventDefault();
-            document.getElementById("form-note").textContent = "Thanks, " + document.getElementById("name").value.trim() + "! This form is a front-end demo and your message hasn’t been sent. Add an email service to receive messages.";
+            const form = event.target, note = document.getElementById("form-note");
+            const btn = form.querySelector("button[type=submit]");
+            if (form.elements["_honey"].value) return;          // hidden spam trap: real people leave it empty
+            const name = document.getElementById("name").value.trim();
+            btn.disabled = true; note.textContent = "Sending…";
+            try {
+                const r = await fetch("https://formsubmit.co/ajax/anshnayan80@gmail.com", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify({
+                        name, email: document.getElementById("email").value.trim(),
+                        message: document.getElementById("message").value.trim(),
+                        _subject: "New message from your portfolio website", _template: "table"
+                    })
+                });
+                const d = await r.json();
+                if (!r.ok || d.success === false || d.success === "false") throw new Error(d.message || r.status);
+                form.reset();
+                note.textContent = "Thanks, " + name + "! Your message has been sent.";
+            } catch (err) {
+                note.textContent = "Sorry, that didn’t send. Please try again in a moment.";
+            } finally { btn.disabled = false; }
         }
 
         // ---- Chess.com live ratings ----
