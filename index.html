@@ -204,6 +204,32 @@
         #lightbox .lb-nav { position:absolute; top:50%; width:44px; height:44px; margin-top:-22px; border:1px solid rgba(164,250,255,.5); border-radius:50%; background:rgba(7,18,35,.78); color:#fff; font-size:1.3rem; cursor:pointer; }
         #lightbox .lb-prev { left:.6rem; } #lightbox .lb-next { right:.6rem; }
         #lightbox .lb-close { top:-3.2rem; }
+        .chess-card { grid-column:1 / -1; }
+        .chess-meta { display:flex; align-items:center; gap:.55rem; margin-top:.7rem; font-family:'DM Mono',monospace; font-size:.85rem; }
+        .chess-meta a { color:var(--sky); text-decoration:none; font-weight:600; }
+        .chess-meta a:hover { text-decoration:underline; text-underline-offset:4px; }
+        #chess-status { color:#8fb2c9; }
+        .live-dot { width:9px; height:9px; border-radius:50%; background:#6b7f93; }
+        .live-dot.live { background:#5dffb0; box-shadow:0 0 10px #5dffb0; animation:livePulse 2s ease-in-out infinite; }
+        .live-dot.offline { background:#ff8f8f; }
+        @keyframes livePulse { 50% { opacity:.45; } }
+        .chess-svg { position:relative; z-index:1; display:block; width:100%; max-width:900px; height:auto; margin:1rem auto 0; overflow:visible; }
+        .chess-svg .axis { stroke:rgba(147,220,255,.28); stroke-dasharray:4 6; }
+        .chess-svg .tick { fill:#73f1ff; }
+        .chess-svg .tick-label { fill:#8fb2c9; font:500 14px 'DM Mono',monospace; }
+        .chess-svg .sin-curve { fill:none; stroke:url(#sinGrad); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:0; }
+        .chess-svg.draw .sin-curve { animation:drawSin 2.4s ease-out both; }
+        @keyframes drawSin { from { stroke-dashoffset:1; } to { stroke-dashoffset:0; } }
+        .chess-svg .hump { cursor:default; }
+        .chess-svg .hump-fill { fill:rgba(115,241,255,.07); transition:fill .3s; }
+        .chess-svg .hump:hover .hump-fill { fill:rgba(115,241,255,.2); }
+        .chess-svg .rt-label { fill:#9fd8f0; font:600 13px 'DM Mono',monospace; letter-spacing:.2em; }
+        .chess-svg .rt-num { fill:#f4faff; font:700 42px 'Syne',sans-serif; transition:filter .3s; }
+        .chess-svg .hump:hover .rt-num { filter:drop-shadow(0 0 10px rgba(115,241,255,.9)); }
+        .chess-svg .rt-num.bump { transform-box:fill-box; transform-origin:center; animation:ratingBump 1.4s ease-out; }
+        @keyframes ratingBump { 0% { transform:scale(1.35); fill:#5dffb0; } 100% { transform:scale(1); fill:#f4faff; } }
+        @media (max-width:680px) { .chess-svg .rt-num { font-size:62px; } .chess-svg .rt-label { font-size:21px; } .chess-svg .tick-label { font-size:22px; } }
+        @media (prefers-reduced-motion:reduce) { .chess-svg.draw .sin-curve, .live-dot.live, .chess-svg .rt-num.bump { animation:none; } }
         @media (max-width:680px) {
             nav { width:92%; min-height:66px; flex-wrap:wrap; padding:.8rem 0; }
             nav ul { width:100%; justify-content:space-between; gap:.5rem; }
@@ -289,10 +315,29 @@
                         <p>Enjoying the process of bringing ideas, details, and imagination to life through sketches and drawings.</p>
                         <a class="card-link" href="#sketches">View my sketches →</a>
                     </article>
-                    <article class="interest-card">
+                    <article class="interest-card chess-card">
                         <div class="interest-icon" aria-hidden="true">♞</div>
                         <h3>Chess</h3>
                         <p>Thinking several moves ahead, exploring strategies, and enjoying the challenge of every position.</p>
+                        <p class="chess-meta"><a id="chess-link" href="https://www.chess.com/member/anshx707" target="_blank" rel="noopener">Chess.com · AnshX707</a><span class="live-dot" id="chess-dot" aria-hidden="true"></span><span id="chess-status" aria-live="polite">Connecting…</span></p>
+                        <svg class="chess-svg" id="chess-svg" viewBox="0 0 900 270" role="img" aria-label="Sine curve from 0 to 3π showing Rapid, Blitz and Bullet ratings on Chess.com">
+                            <defs>
+                                <linearGradient id="sinGrad" gradientUnits="userSpaceOnUse" x1="30" y1="0" x2="870" y2="0"><stop offset="0" stop-color="#73f1ff"/><stop offset=".55" stop-color="#7fb4ff"/><stop offset="1" stop-color="#b9a4ff"/></linearGradient>
+                                <filter id="sinGlow" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                            </defs>
+                            <line class="axis" x1="30" y1="150" x2="870" y2="150"/>
+                        <g class="hump" data-mode="rapid"><path class="hump-fill" d="M30.0,150.0 L34.7,144.8 L39.3,139.5 L44.0,134.4 L48.7,129.2 L53.3,124.1 L58.0,119.1 L62.7,114.2 L67.3,109.3 L72.0,104.6 L76.7,100.0 L81.3,95.5 L86.0,91.2 L90.7,87.1 L95.3,83.1 L100.0,79.3 L104.7,75.7 L109.3,72.3 L114.0,69.1 L118.7,66.1 L123.3,63.4 L128.0,60.9 L132.7,58.6 L137.3,56.6 L142.0,54.9 L146.7,53.4 L151.3,52.2 L156.0,51.2 L160.7,50.5 L165.3,50.1 L170.0,50.0 L174.7,50.1 L179.3,50.5 L184.0,51.2 L188.7,52.2 L193.3,53.4 L198.0,54.9 L202.7,56.6 L207.3,58.6 L212.0,60.9 L216.7,63.4 L221.3,66.1 L226.0,69.1 L230.7,72.3 L235.3,75.7 L240.0,79.3 L244.7,83.1 L249.3,87.1 L254.0,91.2 L258.7,95.5 L263.3,100.0 L268.0,104.6 L272.7,109.3 L277.3,114.2 L282.0,119.1 L286.7,124.1 L291.3,129.2 L296.0,134.4 L300.7,139.5 L305.3,144.8 L310.0,150.0 Z"/>
+                            <text class="rt-label" x="170" y="90" text-anchor="middle">RAPID</text>
+                            <text class="rt-num" id="rating-rapid" x="170" y="130" text-anchor="middle">—</text></g>
+                        <g class="hump" data-mode="blitz"><path class="hump-fill" d="M310.0,150.0 L314.7,155.2 L319.3,160.5 L324.0,165.6 L328.7,170.8 L333.3,175.9 L338.0,180.9 L342.7,185.8 L347.3,190.7 L352.0,195.4 L356.7,200.0 L361.3,204.5 L366.0,208.8 L370.7,212.9 L375.3,216.9 L380.0,220.7 L384.7,224.3 L389.3,227.7 L394.0,230.9 L398.7,233.9 L403.3,236.6 L408.0,239.1 L412.7,241.4 L417.3,243.4 L422.0,245.1 L426.7,246.6 L431.3,247.8 L436.0,248.8 L440.7,249.5 L445.3,249.9 L450.0,250.0 L454.7,249.9 L459.3,249.5 L464.0,248.8 L468.7,247.8 L473.3,246.6 L478.0,245.1 L482.7,243.4 L487.3,241.4 L492.0,239.1 L496.7,236.6 L501.3,233.9 L506.0,230.9 L510.7,227.7 L515.3,224.3 L520.0,220.7 L524.7,216.9 L529.3,212.9 L534.0,208.8 L538.7,204.5 L543.3,200.0 L548.0,195.4 L552.7,190.7 L557.3,185.8 L562.0,180.9 L566.7,175.9 L571.3,170.8 L576.0,165.6 L580.7,160.5 L585.3,155.2 L590.0,150.0 Z"/>
+                            <text class="rt-label" x="450" y="184" text-anchor="middle">BLITZ</text>
+                            <text class="rt-num" id="rating-blitz" x="450" y="224" text-anchor="middle">—</text></g>
+                        <g class="hump" data-mode="bullet"><path class="hump-fill" d="M590.0,150.0 L594.7,144.8 L599.3,139.5 L604.0,134.4 L608.7,129.2 L613.3,124.1 L618.0,119.1 L622.7,114.2 L627.3,109.3 L632.0,104.6 L636.7,100.0 L641.3,95.5 L646.0,91.2 L650.7,87.1 L655.3,83.1 L660.0,79.3 L664.7,75.7 L669.3,72.3 L674.0,69.1 L678.7,66.1 L683.3,63.4 L688.0,60.9 L692.7,58.6 L697.3,56.6 L702.0,54.9 L706.7,53.4 L711.3,52.2 L716.0,51.2 L720.7,50.5 L725.3,50.1 L730.0,50.0 L734.7,50.1 L739.3,50.5 L744.0,51.2 L748.7,52.2 L753.3,53.4 L758.0,54.9 L762.7,56.6 L767.3,58.6 L772.0,60.9 L776.7,63.4 L781.3,66.1 L786.0,69.1 L790.7,72.3 L795.3,75.7 L800.0,79.3 L804.7,83.1 L809.3,87.1 L814.0,91.2 L818.7,95.5 L823.3,100.0 L828.0,104.6 L832.7,109.3 L837.3,114.2 L842.0,119.1 L846.7,124.1 L851.3,129.2 L856.0,134.4 L860.7,139.5 L865.3,144.8 L870.0,150.0 Z"/>
+                            <text class="rt-label" x="730" y="90" text-anchor="middle">BULLET</text>
+                            <text class="rt-num" id="rating-bullet" x="730" y="130" text-anchor="middle">—</text></g>
+                            <path class="sin-curve" d="M30.0,150.0 L34.7,144.8 L39.3,139.5 L44.0,134.4 L48.7,129.2 L53.3,124.1 L58.0,119.1 L62.7,114.2 L67.3,109.3 L72.0,104.6 L76.7,100.0 L81.3,95.5 L86.0,91.2 L90.7,87.1 L95.3,83.1 L100.0,79.3 L104.7,75.7 L109.3,72.3 L114.0,69.1 L118.7,66.1 L123.3,63.4 L128.0,60.9 L132.7,58.6 L137.3,56.6 L142.0,54.9 L146.7,53.4 L151.3,52.2 L156.0,51.2 L160.7,50.5 L165.3,50.1 L170.0,50.0 L174.7,50.1 L179.3,50.5 L184.0,51.2 L188.7,52.2 L193.3,53.4 L198.0,54.9 L202.7,56.6 L207.3,58.6 L212.0,60.9 L216.7,63.4 L221.3,66.1 L226.0,69.1 L230.7,72.3 L235.3,75.7 L240.0,79.3 L244.7,83.1 L249.3,87.1 L254.0,91.2 L258.7,95.5 L263.3,100.0 L268.0,104.6 L272.7,109.3 L277.3,114.2 L282.0,119.1 L286.7,124.1 L291.3,129.2 L296.0,134.4 L300.7,139.5 L305.3,144.8 L310.0,150.0 L314.7,155.2 L319.3,160.5 L324.0,165.6 L328.7,170.8 L333.3,175.9 L338.0,180.9 L342.7,185.8 L347.3,190.7 L352.0,195.4 L356.7,200.0 L361.3,204.5 L366.0,208.8 L370.7,212.9 L375.3,216.9 L380.0,220.7 L384.7,224.3 L389.3,227.7 L394.0,230.9 L398.7,233.9 L403.3,236.6 L408.0,239.1 L412.7,241.4 L417.3,243.4 L422.0,245.1 L426.7,246.6 L431.3,247.8 L436.0,248.8 L440.7,249.5 L445.3,249.9 L450.0,250.0 L454.7,249.9 L459.3,249.5 L464.0,248.8 L468.7,247.8 L473.3,246.6 L478.0,245.1 L482.7,243.4 L487.3,241.4 L492.0,239.1 L496.7,236.6 L501.3,233.9 L506.0,230.9 L510.7,227.7 L515.3,224.3 L520.0,220.7 L524.7,216.9 L529.3,212.9 L534.0,208.8 L538.7,204.5 L543.3,200.0 L548.0,195.4 L552.7,190.7 L557.3,185.8 L562.0,180.9 L566.7,175.9 L571.3,170.8 L576.0,165.6 L580.7,160.5 L585.3,155.2 L590.0,150.0 L594.7,144.8 L599.3,139.5 L604.0,134.4 L608.7,129.2 L613.3,124.1 L618.0,119.1 L622.7,114.2 L627.3,109.3 L632.0,104.6 L636.7,100.0 L641.3,95.5 L646.0,91.2 L650.7,87.1 L655.3,83.1 L660.0,79.3 L664.7,75.7 L669.3,72.3 L674.0,69.1 L678.7,66.1 L683.3,63.4 L688.0,60.9 L692.7,58.6 L697.3,56.6 L702.0,54.9 L706.7,53.4 L711.3,52.2 L716.0,51.2 L720.7,50.5 L725.3,50.1 L730.0,50.0 L734.7,50.1 L739.3,50.5 L744.0,51.2 L748.7,52.2 L753.3,53.4 L758.0,54.9 L762.7,56.6 L767.3,58.6 L772.0,60.9 L776.7,63.4 L781.3,66.1 L786.0,69.1 L790.7,72.3 L795.3,75.7 L800.0,79.3 L804.7,83.1 L809.3,87.1 L814.0,91.2 L818.7,95.5 L823.3,100.0 L828.0,104.6 L832.7,109.3 L837.3,114.2 L842.0,119.1 L846.7,124.1 L851.3,129.2 L856.0,134.4 L860.7,139.5 L865.3,144.8 L870.0,150.0" pathLength="1" filter="url(#sinGlow)"/>
+                            <circle cx="30.0" cy="150" r="3.5" class="tick"/><text x="30.0" y="172" class="tick-label" text-anchor="middle">0</text><circle cx="310.0" cy="150" r="3.5" class="tick"/><text x="310.0" y="172" class="tick-label" text-anchor="middle">π</text><circle cx="590.0" cy="150" r="3.5" class="tick"/><text x="590.0" y="172" class="tick-label" text-anchor="middle">2π</text><circle cx="870.0" cy="150" r="3.5" class="tick"/><text x="870.0" y="172" class="tick-label" text-anchor="middle">3π</text>
+                        </svg>
                     </article>
                 </div>
             </div>
@@ -492,6 +537,44 @@
             event.preventDefault();
             document.getElementById("form-note").textContent = "Thanks, " + document.getElementById("name").value.trim() + "! This form is a front-end demo and your message hasn’t been sent. Add an email service to receive messages.";
         }
+
+        // ---- Chess.com live ratings ----
+        const CHESS_USERNAME = "AnshX707";   // your Chess.com username
+        const CHESS_REFRESH_MS = 60000;   // how often (ms) an open page re-checks for new ratings
+        const chessKeys = { rapid: "chess_rapid", blitz: "chess_blitz", bullet: "chess_bullet" };
+        const chessStatus = document.getElementById("chess-status"), chessDot = document.getElementById("chess-dot");
+        function setRating(mode, value) {
+            const el = document.getElementById("rating-" + mode);
+            const next = value == null ? "—" : String(value);
+            if (el.textContent === next) return;
+            const hadValue = el.textContent !== "—";
+            el.textContent = next;
+            if (hadValue) { el.classList.remove("bump"); void el.getBoundingClientRect(); el.classList.add("bump"); }
+        }
+        async function updateChess() {
+            if (!CHESS_USERNAME) { chessStatus.textContent = "Add your Chess.com ID to go live"; return; }
+            const link = document.getElementById("chess-link");
+            link.textContent = "Chess.com · " + CHESS_USERNAME;
+            link.href = "https://www.chess.com/member/" + encodeURIComponent(CHESS_USERNAME.toLowerCase());
+            try {
+                const r = await fetch("https://api.chess.com/pub/player/" + encodeURIComponent(CHESS_USERNAME.toLowerCase()) + "/stats", { cache: "no-store" });
+                if (!r.ok) throw new Error(r.status);
+                const d = await r.json();
+                for (const m in chessKeys) setRating(m, d[chessKeys[m]] && d[chessKeys[m]].last ? d[chessKeys[m]].last.rating : null);
+                chessDot.className = "live-dot live";
+                chessStatus.textContent = "Live · updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+            } catch (err) {
+                chessDot.className = "live-dot offline";
+                chessStatus.textContent = "Couldn’t reach Chess.com, retrying…";
+            }
+        }
+        updateChess();
+        setInterval(() => { if (!document.hidden) updateChess(); }, CHESS_REFRESH_MS);
+        document.addEventListener("visibilitychange", () => { if (!document.hidden) updateChess(); });
+        const chessSvg = document.getElementById("chess-svg");
+        if ("IntersectionObserver" in window) {
+            new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { chessSvg.classList.add("draw"); o.disconnect(); } }, { threshold: 0.3 }).observe(chessSvg);
+        } else chessSvg.classList.add("draw");
 
         // Sketch lightbox (reuses the thumbnail image, so nothing is stored twice)
         const lightbox = document.getElementById("lightbox");
